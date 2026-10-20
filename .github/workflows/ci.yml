@@ -1,0 +1,30 @@
+name: CI frontend
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.19.1
+          cache: npm
+      - name: Installer les dépendances verrouillées
+        run: npm ci
+      - name: Tester
+        run: npm test
+      - name: Vérifier le style
+        run: npm run lint
+      - name: Vérifier TypeScript et construire
+        run: npm run build
